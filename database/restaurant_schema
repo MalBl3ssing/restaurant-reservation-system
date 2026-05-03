@@ -1,0 +1,67 @@
+-- ============================================
+-- Project: Smart Restaurant System
+-- Part: Database Schema (ERD Implementation)
+-- Author: Malwandla Blessing Mahori
+-- Description:
+-- This script creates the main tables and relationships
+-- for the restaurant management system.
+-- ============================================
+
+CREATE DATABASE restaurant_system;
+USE restaurant_system;
+
+-- Customers
+CREATE TABLE customers (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    phone VARCHAR(20)
+);
+
+-- Tables
+CREATE TABLE restaurant_tables (
+    table_id INT AUTO_INCREMENT PRIMARY KEY,
+    capacity INT,
+    status VARCHAR(20)
+);
+
+-- Menu Items
+CREATE TABLE menu_items (
+    item_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    price DECIMAL(6,2),
+    category VARCHAR(50)
+);
+
+-- Orders
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT,
+    table_id INT,
+    order_date DATETIME,
+    status VARCHAR(20),
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
+    FOREIGN KEY (table_id) REFERENCES restaurant_tables(table_id)
+);
+
+-- Order Items (junction table)
+CREATE TABLE order_items (
+    order_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    item_id INT,
+    quantity INT,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (item_id) REFERENCES menu_items(item_id)
+);
+
+-- Payments
+CREATE TABLE payments (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    amount DECIMAL(8,2),
+    payment_method VARCHAR(50),
+    payment_date DATETIME,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+);
+
+
+
